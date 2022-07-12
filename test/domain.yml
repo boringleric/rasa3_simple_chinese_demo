@@ -1,0 +1,202 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - ask_name
+  - ask_function
+  - bot_challenge
+  - 询问天气情况:
+      use_entities: 
+        - 城市
+        - 日期
+  - 日期:
+      use_entities:
+        - 日期
+  - 城市:
+      use_entities:
+        - 城市
+  - 放歌:
+      use_entities:
+        - 风格
+        - 歌手
+  - 歌曲:
+      use_entities:
+        - 歌曲
+  - play_random_music
+  - ask_sex
+  - ask_age
+  - fuck
+  - praise
+
+responses:
+  utter_greet:
+  - text: 你好，欢迎，如果您表现好，我们可以成为朋友。
+  - text: 借着真主的恩典，我祝福您，我真诚的朋友，祝您强大的、胜利的、永恒的王国永无止境。
+  - text: 很荣幸亲自见到您。毕竟，伟大的思想总是会相互吸引。
+  - text: 您好，我的朋友。我能看见上帝在保佑您。您到这里是来分享您的智慧吗？
+  - text: 有话快说，说完快滚！
+  
+  utter_function:
+  - text: 试试“随便来首歌”？
+  - text: 试试“来个古风歌曲”？
+  - text: 试试“北京明天的天气”？
+  - text: 我会唱，跳，rap和打篮球。还会查天气。
+  - text: 我会查天气，查歌，别的都不会。
+  - text: 我现在只会一些基础问题，比如关于个人信息的回答。还有「查天气」和查歌技能，试试问我「天气怎么样？」
+  - text: 我啥都不会。
+
+  utter_goodbye:
+  - text: 再见呀！我会想你的，才怪！
+  - text: 大爷再来玩啊！
+  - text: Bye
+  - text: 这就走了啊，太没劲了
+  - text: 告诉你个秘密，作者太懒，你可以继续和机器人胡扯，并不会终止，哈哈哈哈哈
+
+  utter_myname:
+  - text: 爷就是个demo机器人！
+  - text: 我就是个机器人
+  - text: 机器人机器人机器人说三遍别问了！
+
+  utter_stop_ask:
+  - text: 问完了吗，你问题怎么这么多？
+  - text: 你咋这么喜欢打听人私生活呢？
+
+  utter_age:
+  - text: 想来至今也该500余年了。
+  - text: 114514岁。
+  - text: 我1453年的。
+
+  utter_sex:
+  - text: 和你一样的
+  - text: 你啥样我就啥样
+
+  utter_iamabot:
+  - text: 爷就是个demo机器人，你还问上瘾了，代码都有自己去搞个玩吧！
+  - text: 我去我就是个机器人我啥都不会啊，你问得不好还怪我了！
+  - text: 机器人机器人机器人说三遍别问了！
+
+  utter_please_rephrase:
+  - text: 说的啥啊我不明白，再说一次。
+  - text: 会不会说话，听不明白。
+
+  utter_thanks:
+  - text: 太客气了，哈哈哈哈
+  - text: 承让承让
+
+  utter_fuck:
+  - text: 有病你治病，你别找我啊，我又不是兽医。
+  - text: 你小时候被猪亲过吧。
+  - text: 2B形容你，人家铅笔不乐意！
+  - text: 我是算命的。请问您算什么东西？
+  - text: 你爸今晚连夜庭院种枇杷。
+  - text: 我打了狂犬疫苗 你以为我会怕你？
+
+entities:
+- 日期
+- 城市
+- 风格
+- 歌手
+- 歌曲
+
+actions:
+- action_weather_form
+- validate_weather_form
+- action_ask_weather_form_city
+- action_ask_weather_form_date
+- action_song_query_with_song
+- action_get_random_song
+- action_reset_all_slots
+- action_song_from_form
+
+forms:
+  weather_form:
+    ignored_intents:
+    - greet
+    - goodbye
+    - ask_name
+    - ask_function
+    - bot_challenge
+    required_slots:
+      - city
+      - date
+
+  music_form:
+    ignored_intents:
+    - greet
+    - goodbye
+    - ask_name
+    - ask_function
+    - bot_challenge
+    required_slots:
+      - style
+      - singer
+
+  style_form:
+    ignored_intents:
+    - greet
+    - goodbye
+    - ask_name
+    - ask_function
+    - bot_challenge
+    required_slots:
+      - style
+
+  singer_form:
+    ignored_intents:
+    - greet
+    - goodbye
+    - ask_name
+    - ask_function
+    - bot_challenge
+    required_slots:
+      - singer
+
+  song_form:
+    ignored_intents:
+    - greet
+    - goodbye
+    - ask_name
+    - ask_function
+    - bot_challenge
+    required_slots:
+      - song        
+      
+slots:
+  city:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: 城市
+  date:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: 日期
+  style:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      intent: 放歌
+      entity: 风格
+  singer:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      intent: 放歌
+      entity: 歌手 
+  song:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      intent: 歌曲
+      entity: 歌曲 
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

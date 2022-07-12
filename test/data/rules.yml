@@ -1,0 +1,107 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: 问名字
+  steps: 
+  - intent: ask_name
+  - action: utter_myname
+
+
+- rule: 问功能
+  steps:
+  - intent: ask_function
+  - action: utter_function
+
+- rule: NLU置信度低的时候重新问一下
+  steps:
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+
+# 天气 Form
+- rule: 激活天气情况
+  steps:
+  - intent: 询问天气情况
+  - action: weather_form
+  - slot_was_set:
+    - requested_slot: date
+    - requested_slot: city
+  - active_loop: weather_form
+
+- rule: 处理天气情况
+  condition:
+  - active_loop: weather_form
+  steps:
+  - action: weather_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_weather_form
+
+- rule: 通过日期激活天气情况
+  steps:
+  - intent: 日期
+  - action: weather_form
+  - slot_was_set:
+    - requested_slot: date
+  - active_loop: weather_form
+
+- rule: 通过城市激活天气情况
+  steps:
+  - intent: 城市
+  - action: weather_form
+  - slot_was_set:
+    - requested_slot: city
+  - active_loop: weather_form
+
+
+# 歌曲
+- rule: 通过歌曲查歌曲
+  steps:
+  - intent: 歌曲
+  - action: song_form
+  - slot_was_set:
+    - requested_slot: 歌曲
+  - active_loop: song_form
+
+- rule: 根据歌曲查歌曲
+  condition:
+  - active_loop: song_form
+  steps:
+  - action: song_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_song_query_with_song
+  - action: action_reset_all_slots
+
+- rule: 获得歌曲
+  condition:
+  - active_loop: music_form
+  steps:
+  - action: music_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_song_from_form
+  - action: action_reset_all_slots
+
+- rule: 随机获得歌曲
+  steps:
+  - intent: play_random_music
+  - action: action_get_random_song
+
+- rule: 夸奖反应
+  steps:
+  - intent: praise
+  - action: utter_thanks

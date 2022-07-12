@@ -1,0 +1,55 @@
+version: "3.1"
+
+stories:
+
+- story: 问玩法
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_function
+  - action: utter_function
+
+
+- story: 乱问
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_name
+  - action: utter_myname
+  - intent: ask_age
+  - action: utter_age
+  - intent: ask_sex
+  - action: utter_sex
+  - action: utter_stop_ask
+
+
+- story: 问歌曲1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_function
+  - action: utter_function
+  - intent: play_random_music
+  - action: action_get_random_song
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: 问歌曲3
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: 放歌
+  - action: action_song_from_form
+  - active_loop: music_form
+  - slot_was_set:
+    - requested_slot: singer
+  - action: action_song_query_with_song
+  - action: action_reset_all_slots
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+- story: 骂人
+  steps:
+  - intent: fuck
+  - action: utter_fuck

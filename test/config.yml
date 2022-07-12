@@ -1,0 +1,46 @@
+# The config recipe.
+# https://rasa.com/docs/rasa/model-configuration/
+recipe: default.v1
+
+# Configuration for Rasa NLU.
+# https://rasa.com/docs/rasa/nlu/components/
+language: zh
+
+pipeline:
+# # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
+# # If you'd like to customize it, uncomment and adjust the pipeline.
+# # See https://rasa.com/docs/rasa/tuning-your-model for more information.
+    - name: components.bert_tokenizer.BertTokenizer
+      model_name: bert
+      model_weights: bert-base-chinese
+    - name: LanguageModelFeaturizer
+      model_name: bert
+      model_weights: bert-base-chinese
+    - name: RegexFeaturizer
+    - name: RegexEntityExtractor
+      use_word_boundaries: False
+      case_sensitive: False
+      use_lookup_tables: True
+      use_regexes: True
+    - name: DIETClassifier
+      constrain_similarities: True
+      epochs: 100
+    - name: ResponseSelector
+      constrain_similarities: True
+      epochs: 100
+    - name: EntitySynonymMapper
+    - name: FallbackClassifier
+      threshold: 0.3
+
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/core/policies/
+policies:
+# # No configuration for policies was provided. The following default policies were used to train your model.
+# # If you'd like to customize them, uncomment and adjust the policies.
+# # See https://rasa.com/docs/rasa/policies for more information.
+    - name: MemoizationPolicy
+    - name: TEDPolicy
+      constrain_similarities: True
+      max_history: 5
+      epochs: 100
+    - name: RulePolicy
